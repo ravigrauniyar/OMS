@@ -1,35 +1,46 @@
-﻿using System;
-
-namespace OMS
+﻿namespace OMS
 {
     class Program
     {
         public static void Main(string[] args)
         {
-            double success = 3;
             double serviceRate = 0.1;
-            double intervalLength = 15;
-            double noShowProb = 0.2;
+            int intervalLength = 15;
 
-            int totalIntervalCount = 3;
+            double noShowProb = 0.2;
+            int patientsCount = 7;
+            int totalIntervalCount = 10;
+
+            double N = 4; double M = 3;
+
+            double expectedWorkload = ((1 - noShowProb) * N + M) / serviceRate;
 
             Console.WriteLine($"\nAverage service time = {1 / serviceRate} minutes" +
                                 $"\n\nScheduled time per slot is {intervalLength} minutes\n\n" +
                                 $"Number of slots per day = {totalIntervalCount}\n");
 
-            for (int i = 1; i <= 3; i++)
-            {
-                int[] regularPatientsCount = { 2 * i, 0, i };
+            int[] regularPatientsCount = { 0, 1, 0, 0, 0, 3, 0, 0, 0, 0 };
 
-                int[] urgentPatientsCount = { i, i, 0 };
+            int[] urgentPatientsCount = { 1, 0, 0, 0, 0, 1, 0, 1, 0, 0 };
 
-                OvertimeFunc ot = new OvertimeFunc(noShowProb, 5 * i, totalIntervalCount,
-                                regularPatientsCount, urgentPatientsCount, success, serviceRate, intervalLength);
+            GeneralFunc genFunction = new GeneralFunc(
+                noShowProb, patientsCount, regularPatientsCount,
+                urgentPatientsCount, serviceRate, intervalLength, totalIntervalCount, expectedWorkload
+            );
 
-                string overtimeValue = ot.getValue().ToString("0.000");
+            OvertimeFunc ot = new OvertimeFunc(genFunction);
 
-                Console.WriteLine($"\nOvertime when {5 * i} patients are scheduled in {totalIntervalCount} intervals = {overtimeValue} minutes.\n");
-            }
+            string overtimeValue = ot.getValue().ToString("0.000");
+
+            Console.WriteLine($"\nOvertime when {patientsCount} patients are scheduled in {totalIntervalCount} " +
+                                $"intervals = {overtimeValue} minutes.\n");
+
+            IdleTimeFunc it = new IdleTimeFunc(genFunction);
+
+            string idleTimeValue = it.getValue().ToString("0.000");
+
+            Console.WriteLine($"\nIdletime when {patientsCount} patients are scheduled in {totalIntervalCount} " +
+                                $"intervals = {idleTimeValue} minutes.\n");
         }
     }
 }
