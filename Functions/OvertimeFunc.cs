@@ -10,9 +10,9 @@ namespace OMS
         public double getValue()
         {
             double result = 0;
-            for (int j = 1; j <= general.patientsCount; j++)
+            for (int i = 1; i <= general.patientsCount; i++)
             {
-                result += general.getIBeforeArrivalProb(general.totalIntervalCount + 1, j) * j / general.serviceRate;
+                result += general.getIBeforeArrivalProb(general.totalIntervalCount + 1, i) * i / general.serviceRate;
             }
             return result;
         }

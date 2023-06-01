@@ -24,7 +24,7 @@ namespace OMS
             this.totalIntervalCount = totalIntervalCount;
             this.expectedWorkload = expectedWorkload;
         }
-        private double getFactorialValue(double value)
+        public double getFactorialValue(double value)
         {
             if (value >= 0)
             {
@@ -46,11 +46,11 @@ namespace OMS
             double result = Math.Pow(muD, value) * Math.Exp(-muD) / factorial;
             return result;
         }
-        private double getCombinationValue(double n, double r)
+        public double getCombinationValue(double n, double r)
         {
             return getFactorialValue(n) / (getFactorialValue(n - r) * getFactorialValue(r));
         }
-        private double getSuccessProb(int Xt, int k)
+        public double getSuccessProb(int Xt, int k)
         {
             return getCombinationValue(Xt, k) * Math.Pow((1 - noShowProb), k) * Math.Pow(noShowProb, (Xt - k));
         }
@@ -63,7 +63,7 @@ namespace OMS
             }
             return count;
         }
-        private double getIAfterArrivalProb(int t, int i)
+        public double getIAfterArrivalProb(int t, int i)
         {
             double result = 0;
             if (t > 0)
@@ -83,6 +83,7 @@ namespace OMS
         }
         public double getIBeforeArrivalProb(int t, int i)
         {
+            int count = 0;
             if (t == 1 && i == 0)
             {
                 return 1;
@@ -91,6 +92,7 @@ namespace OMS
             for (int j = i; j <= patientsCount; j++)
             {
                 result += getIAfterArrivalProb(t - 1, j) * getProbability(j - i);
+                count++;
             }
             return result;
         }

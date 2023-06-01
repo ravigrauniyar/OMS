@@ -40,10 +40,13 @@ namespace OMS
                 {
                     result3 += general.getIBeforeArrivalProb(Tmax, i) * (i + k + Ytmax) / general.serviceRate;
                 }
-
                 result2 += general.getProbability(k) * result3;
             }
-            return result1 + result2;
+            double result = result1 + result2;
+            if (result > 0)
+                return result;
+            else
+                return 0;
         }
     }
 }
