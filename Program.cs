@@ -2,111 +2,74 @@
 {
     class Program
     {
-        public int getPatientsCount(int[] patientCount)
+        public int[] getPatientsArr()
         {
-            int count = 0;
-            for (int i = 0; i < patientCount.Length; i++)
+            string? arrStr = Console.ReadLine();
+            string[] patientsStrArr = arrStr!.Split(" ");
+            int[] patientsIntArr = new int[patientsStrArr.Length];
+
+            for (int i = 0; i < patientsStrArr.Length; i++)
             {
-                count += patientCount[i];
+                patientsIntArr[i] = int.Parse(patientsStrArr[i]);
             }
-            return count;
+            return patientsIntArr;
         }
-        public static void Main(string[] args)
+        public void f(int[][] X)
         {
+            int[] regularPatientsCount = X[0];
+            int[] urgentPatientsCount = X[1];
+
+            int N = regularPatientsCount.Sum(); int M = urgentPatientsCount.Sum();
+            int patientsCount = M + N;
+            int totalIntervalCount = patientsCount;
+
             double serviceRate = 0.06667;
             int intervalLength = 15;
-
             double noShowProb = 0.1;
+            double expectedWorkload = ((1 - noShowProb) * N + M);
 
-            int[][] regularPatientsCount =
-            {
-                new int []{ 1, 0, 1, 1, 0 },
-                new int []{ 1, 1, 1, 1, 0 },
-                new int []{ 0, 0, 1, 1, 1, 0 },
-                new int []{ 0, 1, 1, 1, 1, 0 },
-                new int []{ 1, 1, 1, 1, 1, 0 },
-                new int []{ 0, 0, 1, 1, 1, 1, 0 },
-                new int []{ 0, 1, 1, 1, 1, 1, 0 },
-                new int []{ 1, 1, 1, 1, 1, 1, 0 },
-                new int []{ 0, 2, 1, 1, 0, 0, 0, 0 },
-                new int []{ 0, 2, 1, 1, 0, 1, 0, 0 },
-                new int []{ 0, 2, 1, 1, 1, 1, 0, 0 },
-                new int []{ 1, 2, 1, 1, 1, 1, 0, 0 },
-                new int []{ 0, 2, 1, 1, 0, 0, 1, 0, 0 },
-                new int []{ 0, 2, 1, 1, 1, 0, 1, 0, 0 },
-                new int []{ 0, 2, 1, 1, 1, 1, 1, 0, 0 },
-                new int []{ 1, 2, 1, 1, 1, 1, 1, 0, 0 },
-                new int []{ 0, 2, 1, 1, 0, 0, 0, 1, 0, 0 },
-                new int []{ 0, 2, 1, 1, 1, 0, 0, 1, 0, 0 },
-                new int []{ 0, 2, 1, 1, 1, 1, 0, 1, 0, 0 },
-                new int []{ 0, 2, 1, 1, 1, 1, 1, 1, 0, 0 },
-                new int []{ 1, 2, 1, 1, 1, 1, 1, 1, 0, 0 }
-            };
-
-            int[][] urgentPatientsCount = new int[][]{
-                new int []{ 1, 1, 0, 0, 0 },
-                new int []{ 1, 0, 0, 0, 0 },
-                new int []{ 2, 1, 0, 0, 0, 0 },
-                new int []{ 2, 0, 0, 0, 0, 0 },
-                new int []{ 1, 0, 0, 0, 0, 0 },
-                new int []{ 2, 1, 0, 0, 0, 0, 0 },
-                new int []{ 2, 0, 0, 0, 0, 0, 0 },
-                new int []{ 1, 0, 0, 0, 0, 0, 0 },
-                new int []{ 2, 0, 0, 0, 1, 1, 0, 0 },
-                new int []{ 2, 0, 0, 0, 1, 0, 0, 0 },
-                new int []{ 2, 0, 0, 0, 0, 0, 0, 0 },
-                new int []{ 1, 0, 0, 0, 0, 0, 0, 0 },
-                new int []{ 2, 0, 0, 0, 1, 1, 0, 0, 0 },
-                new int []{ 2, 0, 0, 0, 0, 1, 0, 0, 0 },
-                new int []{ 2, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int []{ 1, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int []{ 2, 0, 0, 0, 1, 1, 1, 0, 0, 0 },
-                new int []{ 2, 0, 0, 0, 0, 1, 1, 0, 0, 0 },
-                new int []{ 2, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
-                new int []{ 2, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int []{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
-            };
-            double[] researchValue = {
-                100.87, 97.81, 115.15, 112.14, 109.35, 125.48, 122.71, 120.17, 138.34, 134.82, 131.49,
-                128.38, 145.65, 142.22, 138.98, 136.01, 156.07, 152.60, 149.26, 146.07, 143.25
-            };
-
-            Program prog = new Program();
             Console.WriteLine($"\nAverage service time = {1 / serviceRate} minutes" +
                                                 $"\n\nScheduled time per slot is {intervalLength} minutes.");
 
-            Console.WriteLine("\nS.N.\t\tRegular\t\tUrgent\t\tTotal\t\tProgram's Objective Value\tResearch's Objective Value\n");
-            for (int i = 0; i < 21; i++)
-            {
-                int N = prog.getPatientsCount(regularPatientsCount[i]); int M = prog.getPatientsCount(urgentPatientsCount[i]);
+            Console.WriteLine("\nS.N.\t\tRegular\t\tUrgent\t\tTotal\t\tProgram's Objective Value\n");
 
-                int patientsCount = M + N;
+            GeneralFunc genFunction = new GeneralFunc(
+                noShowProb, patientsCount, regularPatientsCount,
+                urgentPatientsCount, serviceRate, intervalLength, totalIntervalCount, expectedWorkload
+            );
 
-                int totalIntervalCount = patientsCount;
+            OvertimeFunc ot = new OvertimeFunc(genFunction);
+            double overtimeValue = ot.getValue();
 
-                double expectedWorkload = ((1 - noShowProb) * N + M);
+            IdleTimeFunc it = new IdleTimeFunc(genFunction);
+            double idleTimeValue = it.getValue();
 
-                GeneralFunc genFunction = new GeneralFunc(
-                    noShowProb, patientsCount, regularPatientsCount[i],
-                    urgentPatientsCount[i], serviceRate, intervalLength, totalIntervalCount, expectedWorkload
-                );
+            WaitTimeFunc wt = new WaitTimeFunc(genFunction);
+            double waitTimeValue = wt.getValue();
 
-                OvertimeFunc ot = new OvertimeFunc(genFunction);
-                double overtimeValue = ot.getValue();
+            double alpha = 2.5, beta = 5;
+            double objFuncValue = alpha * waitTimeValue + idleTimeValue + beta * overtimeValue;
 
-                IdleTimeFunc it = new IdleTimeFunc(genFunction);
-                double idleTimeValue = it.getValue();
+            string objFuncStr = objFuncValue.ToString("0.000");
 
-                WaitTimeFunc wt = new WaitTimeFunc(genFunction);
-                double waitTimeValue = wt.getValue();
+            Console.WriteLine($"1\t\t{N}\t\t{M}\t\t{N + M}\t\t{objFuncStr}");
+        }
+        public static void Main(string[] args)
+        {
+            Program prog = new Program();
 
-                double alpha = 2.5, beta = 5;
-                double objFuncValue = alpha * waitTimeValue + idleTimeValue + beta * overtimeValue;
+            // THE ALGORITHM WILL PROVIDE US THE SCHEDULE 'X' BUT FOR NOW USER GIVEN SCHEDULE IS USED
 
-                string objFuncStr = objFuncValue.ToString("0.000");
+            Console.WriteLine("\nEnter schedule of Regular Patients separated by Space:\n");
+            int[] regularPatientsCount = prog.getPatientsArr();
 
-                Console.WriteLine($"{i + 1}\t\t{N}\t\t{M}\t\t{N + M}\t\t{objFuncStr}\t\t\t\t{researchValue[i]}");
-            }
+            Console.WriteLine("\nEnter schedule of Urgent Patients separated by Space:\n");
+            int[] urgentPatientsCount = prog.getPatientsArr();
+
+            int[][] X = { regularPatientsCount, urgentPatientsCount };
+
+            // CALCULATING AND DISPLAYING f(X)
+            prog.f(X);
         }
     }
 }

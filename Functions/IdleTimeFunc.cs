@@ -10,7 +10,6 @@ namespace OMS
         private int getTmax(int T)
         {
             int Tmax = 0;
-
             for (int t = 0; t < T; t++)
             {
                 if (general.regularPatientsCount[t] + general.urgentPatientsCount[t] > 0)

@@ -12,8 +12,7 @@ namespace OMS
             double result = 0;
             for (int i = 1; i <= general.patientsCount; i++)
             {
-                result += general.getIBeforeArrivalProb(general.totalIntervalCount + 1, i)
-                                * i / general.serviceRate;
+                result += general.getIBeforeArrivalProb(general.totalIntervalCount + 1, i) * i / general.serviceRate;
             }
             return result;
         }

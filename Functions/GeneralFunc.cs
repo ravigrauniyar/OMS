@@ -2,14 +2,9 @@ namespace OMS
 {
     class GeneralFunc
     {
-        public readonly double noShowProb;
-        public readonly int patientsCount;
-        public readonly int[] regularPatientsCount;
-        public readonly int[] urgentPatientsCount;
-        public readonly double serviceRate;
-        public readonly int intervalLength;
-        public readonly int totalIntervalCount;
-        public readonly double expectedWorkload;
+        public readonly double noShowProb, serviceRate, expectedWorkload;
+        public readonly int patientsCount, intervalLength, totalIntervalCount;
+        public readonly int[] regularPatientsCount, urgentPatientsCount;
         public GeneralFunc(
                 double noShowProb, int patientsCount, int[] regularPatientsCount, int[] urgentPatientsCount,
                 double serviceRate, int intervalLength, int totalIntervalCount, double expectedWorkload
@@ -44,8 +39,7 @@ namespace OMS
             double muD = serviceRate * intervalLength;
             double factorial = getFactorialValue(i);
 
-            double result = Math.Pow(muD, i) * Math.Exp(-muD) / factorial;
-            return result;
+            return Math.Pow(muD, i) * Math.Exp(-muD) / factorial;
         }
         // PROBABILITY THAT THERE ARE NO FEWER THAN i DEPARTURES DURING AN INTERVAL
         public double getIOrMoreDepartProb(int i)
@@ -76,7 +70,6 @@ namespace OMS
         public double getIAfterArrivalProb(int t, int i)
         {
             double result = 0;
-
             int Xt = regularPatientsCount[t - 1];
             int Yt = urgentPatientsCount[t - 1];
 
@@ -84,7 +77,6 @@ namespace OMS
             {
                 return 0;
             }
-
             if (i <= getPatientsCountTill(t) && i >= Yt)
             {
                 for (int k = 0; k <= Xt; k++)
@@ -105,7 +97,6 @@ namespace OMS
                     return 1;
                 }
                 int count = getPatientsCountTill(t - 1);
-
                 // FOR t WE NEED YtMinus1 AND FOR YtMinus1 ARRAY INDEX = t - 2
                 int Yt = urgentPatientsCount[t - 2];
 
