@@ -2,22 +2,19 @@ namespace OMS
 {
     class GeneralFunc
     {
-        public readonly double noShowProb, serviceRate, expectedWorkload;
-        public readonly int patientsCount, intervalLength, totalIntervalCount;
+        public readonly double noShowProb, serviceRate;
+        public readonly int intervalLength;
         public readonly int[] regularPatientsCount, urgentPatientsCount;
         public GeneralFunc(
-                double noShowProb, int patientsCount, int[] regularPatientsCount, int[] urgentPatientsCount,
-                double serviceRate, int intervalLength, int totalIntervalCount, double expectedWorkload
-            )
+            double noShowProb, int[] regularPatientsCount, int[] urgentPatientsCount,
+            double serviceRate, int intervalLength
+        )
         {
             this.noShowProb = noShowProb;
             this.regularPatientsCount = regularPatientsCount;
             this.urgentPatientsCount = urgentPatientsCount;
             this.intervalLength = intervalLength;
-            this.patientsCount = patientsCount;
             this.serviceRate = serviceRate;
-            this.totalIntervalCount = totalIntervalCount;
-            this.expectedWorkload = expectedWorkload;
         }
         // FACTORIAL OF A NUMBER
         public double getFactorialValue(double value)
@@ -26,12 +23,26 @@ namespace OMS
             {
                 return 1;
             }
-            return value * getFactorialValue(value - 1);
+            double factorial = value * getFactorialValue(value - 1);
+            return factorial;
         }
         // VALUE OF C(n, r) = n! / ((n-r)! * r!)
         public double getCombinationValue(double n, double r)
         {
             return getFactorialValue(n) / (getFactorialValue(n - r) * getFactorialValue(r));
+        }
+        // FIND THE INTERVAL OF LAST SCHEDULED PATIENT
+        public int getTmax(int T)
+        {
+            int Tmax = 0;
+            for (int t = 0; t < T; t++)
+            {
+                if (regularPatientsCount[t] + urgentPatientsCount[t] > 0)
+                {
+                    Tmax = t;
+                }
+            }
+            return Tmax + 1;
         }
         // PROBABILITY THAT THERE ARE i DEPARTURES DURING AN INTERVAL
         public double getIDepartureProb(int i)
@@ -97,7 +108,6 @@ namespace OMS
                     return 1;
                 }
                 int count = getPatientsCountTill(t - 1);
-                // FOR t WE NEED YtMinus1 AND FOR YtMinus1 ARRAY INDEX = t - 2
                 int Yt = urgentPatientsCount[t - 2];
 
                 for (int j = Yt; j <= count; j++)
