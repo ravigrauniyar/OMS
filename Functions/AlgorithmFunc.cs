@@ -41,6 +41,15 @@ namespace OMS
                 }
             }
         }
+        private int GetKValue(int T)
+        {
+            int k = 0;
+            for (int i = 1; i < T; i++)
+            {
+                //DELTA EVALUATION
+            }
+            return k;
+        }
         public void ShowOptimalSchedule()
         {
             ObjectiveFunc objFunc = new ObjectiveFunc(
@@ -56,7 +65,7 @@ namespace OMS
 
                 for (int j = 0; j < (M + N); j++)
                 {
-                    Console.Write($"{_localSchedule[i,j]}\t");
+                    Console.Write($"{_localSchedule[i, j]}\t");
                 }
             }
             Console.WriteLine($"\n\nObjective function value = {objFuncValue}");
